@@ -58,39 +58,100 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String username = '';
+  String password = '';
+
+  void _loginWithUsernamePassword() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Login Details'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Username: $username'),
+              Text('Password: $password'),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
       ),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               'Login with:',
               style: TextStyle(fontSize: 24),
             ),
             SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  username = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Username',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  password = value;
+                });
+              },
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Handle username/password login
+                // TODO: Handle login with username/password
+                print('Username: $username');
+                print('Password: $password');
               },
-              child: Text('Login with Username/Password'),
+              child: Text('Login'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // Handle Google login
+                // TODO: Handle Google login
               },
               child: Text('Login with Google'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // Handle Facebook login
+                // TODO: Handle Facebook login
               },
               child: Text('Login with Facebook'),
             ),
