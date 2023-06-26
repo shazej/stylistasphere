@@ -68,30 +68,19 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = '';
 
   void _loginWithUsernamePassword() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Login Details'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Username: $username'),
-              Text('Password: $password'),
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+    if (username == 'barber1' && password == 'barber@1') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfilePage(),
+        ),
+      );
+    } else {
+      final snackBar = SnackBar(
+        content: Text('Your entered login is incorrect'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   @override
@@ -134,11 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // TODO: Handle login with username/password
-                print('Username: $username');
-                print('Password: $password');
-              },
+              onPressed: _loginWithUsernamePassword,
               child: Text('Login'),
             ),
             SizedBox(height: 10),
@@ -156,6 +141,158 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text('Login with Facebook'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String name = '';
+  String businessCategory = '';
+  String country = '';
+  String language = 'English';
+  String gender = 'Male';
+
+  void _continueButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OtpVerificationPage(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            GestureDetector(
+              onTap: () {
+                // TODO: Implement profile photo editing
+              },
+              child: CircleAvatar(
+                radius: 60,
+                // TODO: Replace with actual profile photo
+                backgroundImage: AssetImage('images/default_profile_photo.png'),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  name = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Name',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  businessCategory = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Business Category',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  country = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Country',
+              ),
+            ),
+            SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: language,
+              onChanged: (value) {
+                setState(() {
+                  language = value!;
+                });
+              },
+              items: ['English', 'Spanish', 'French', 'German']
+                  .map((language) => DropdownMenuItem<String>(
+                        value: language,
+                        child: Text(language),
+                      ))
+                  .toList(),
+              decoration: InputDecoration(
+                labelText: 'Language',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Gender:',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Radio<String>(
+                  value: 'Male',
+                  groupValue: gender,
+                  onChanged: (value) {
+                    setState(() {
+                      gender = value!;
+                    });
+                  },
+                ),
+                Text('Male'),
+                SizedBox(width: 20),
+                Radio<String>(
+                  value: 'Female',
+                  groupValue: gender,
+                  onChanged: (value) {
+                    setState(() {
+                      gender = value!;
+                    });
+                  },
+                ),
+                Text('Female'),
+              ],
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _continueButtonPressed,
+              child: Text('Continue'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OtpVerificationPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('OTP Verification'),
+      ),
+      body: Center(
+        child: Text(
+          'OTP Email Verification Page',
+          style: TextStyle(fontSize: 24),
         ),
       ),
     );
