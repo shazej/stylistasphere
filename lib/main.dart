@@ -83,6 +83,15 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _navigateToForgotPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ForgotPasswordPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,6 +148,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 // TODO: Handle Facebook login
               },
               child: Text('Login with Facebook'),
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              onPressed: _navigateToForgotPassword,
+              child: Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  color: Colors.blue,
+                ),
+              ),
             ),
           ],
         ),
@@ -334,6 +353,43 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             ElevatedButton(
               onPressed: _verifyButtonPressed,
               child: Text('Verify'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ForgotPasswordPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Forgot Password'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Please enter your email address below to receive your OTP number',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: 'Email Address',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Implement forgot password functionality
+              },
+              child: Text('Send OTP'),
             ),
           ],
         ),
