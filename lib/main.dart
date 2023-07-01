@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(MyApp());
@@ -402,7 +403,38 @@ class CongratulationsPage extends StatelessWidget {
 
 class PurchasePremiumPlanPage extends StatelessWidget {
   void _buyNowButtonPressed(BuildContext context, String plan) {
-    // TODO: Implement the purchase logic
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat.yMd().format(now);
+
+    print('User: ${getUserFullName()}');
+    print('Plan: $plan');
+    print('Date: $formattedDate');
+    print('Amount: ${getPlanPrice(plan)}');
+
+    // TODO: Implement the logic to record the user's plan selection in your system
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfirmationPage(),
+      ),
+    );
+  }
+
+  String getUserFullName() {
+    return 'John Doe';
+  }
+
+  String getPlanPrice(String plan) {
+    if (plan == 'Monthly Plan') {
+      return '80 QAR per month';
+    } else if (plan == 'Mobile App + Desktop 1 Year') {
+      return '1152 QAR';
+    } else if (plan == 'On Sale - Lifetime Purchase') {
+      return '2500 QAR';
+    } else {
+      return '';
+    }
   }
 
   @override
@@ -432,16 +464,14 @@ class PurchasePremiumPlanPage extends StatelessWidget {
               title: 'Mobile App + Desktop 1 Year',
               price: '1152 QAR',
               buttonText: 'Select',
-              onPressed: () =>
-                  _buyNowButtonPressed(context, 'Mobile App + Desktop 1 Year'),
+              onPressed: () => _buyNowButtonPressed(context, 'Mobile App + Desktop 1 Year'),
             ),
             SizedBox(height: 10),
             PlanCard(
               title: 'On Sale - Lifetime Purchase',
               price: '2500 QAR',
               buttonText: 'Select',
-              onPressed: () =>
-                  _buyNowButtonPressed(context, 'On Sale - Lifetime Purchase'),
+              onPressed: () => _buyNowButtonPressed(context, 'On Sale - Lifetime Purchase'),
             ),
           ],
         ),
@@ -489,7 +519,21 @@ class PlanCard extends StatelessWidget {
       ),
     );
   }
-} 
+}
+
+class ConfirmationPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Confirmation'),
+      ),
+      body: Center(
+        child: Text('Purchase confirmed!'),
+      ),
+    );
+  }
+}
 
 class ForgotPasswordPage extends StatelessWidget {
   @override
