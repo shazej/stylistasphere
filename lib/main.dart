@@ -312,7 +312,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   void _verifyButtonPressed() {
     if (pin.length == 4) {
       // TODO: Implement OTP verification logic
-      print('OTP Verified');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CongratulationsPage(),
+        ),
+      );
     } else {
       final snackBar = SnackBar(
         content: Text('Please enter a valid 4-digit PIN'),
@@ -355,6 +360,23 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               child: Text('Verify'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CongratulationsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Congratulations'),
+      ),
+      body: Center(
+        child: Text(
+          'Congratulations! OTP verification successful!',
+          style: TextStyle(fontSize: 24),
         ),
       ),
     );
