@@ -282,17 +282,60 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-class OtpVerificationPage extends StatelessWidget {
+class OtpVerificationPage extends StatefulWidget {
+  @override
+  _OtpVerificationPageState createState() => _OtpVerificationPageState();
+}
+
+class _OtpVerificationPageState extends State<OtpVerificationPage> {
+  String pin = '';
+
+  void _verifyButtonPressed() {
+    if (pin.length == 4) {
+      // TODO: Implement OTP verification logic
+      print('OTP Verified');
+    } else {
+      final snackBar = SnackBar(
+        content: Text('Please enter a valid 4-digit PIN'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('OTP Verification'),
       ),
-      body: Center(
-        child: Text(
-          'OTP Email Verification Page',
-          style: TextStyle(fontSize: 24),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Enter the 4-digit PIN sent to your email:',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  pin = value;
+                });
+              },
+              keyboardType: TextInputType.number,
+              maxLength: 4,
+              decoration: InputDecoration(
+                labelText: 'PIN',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _verifyButtonPressed,
+              child: Text('Verify'),
+            ),
+          ],
         ),
       ),
     );
