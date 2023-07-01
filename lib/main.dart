@@ -367,21 +367,129 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 }
 
 class CongratulationsPage extends StatelessWidget {
+  void _navigateToPurchasePremiumPlan(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PurchasePremiumPlanPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Congratulations'),
       ),
-      body: Center(
-        child: Text(
-          'Congratulations! OTP verification successful!',
-          style: TextStyle(fontSize: 24),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Congratulations! OTP verification successful!',
+            style: TextStyle(fontSize: 24),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () => _navigateToPurchasePremiumPlan(context),
+            child: Text('Continue'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PurchasePremiumPlanPage extends StatelessWidget {
+  void _buyNowButtonPressed(BuildContext context, String plan) {
+    // TODO: Implement the purchase logic
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Purchase Premium Plan'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Choose a plan:',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 10),
+            PlanCard(
+              title: 'Monthly Plan',
+              price: '80 QAR per month',
+              buttonText: 'Select',
+              onPressed: () => _buyNowButtonPressed(context, 'Monthly Plan'),
+            ),
+            SizedBox(height: 10),
+            PlanCard(
+              title: 'Mobile App + Desktop 1 Year',
+              price: '1152 QAR',
+              buttonText: 'Select',
+              onPressed: () =>
+                  _buyNowButtonPressed(context, 'Mobile App + Desktop 1 Year'),
+            ),
+            SizedBox(height: 10),
+            PlanCard(
+              title: 'On Sale - Lifetime Purchase',
+              price: '2500 QAR',
+              buttonText: 'Select',
+              onPressed: () =>
+                  _buyNowButtonPressed(context, 'On Sale - Lifetime Purchase'),
+            ),
+          ],
         ),
       ),
     );
   }
 }
+
+class PlanCard extends StatelessWidget {
+  final String title;
+  final String price;
+  final String buttonText;
+  final VoidCallback onPressed;
+
+  const PlanCard({
+    required this.title,
+    required this.price,
+    required this.buttonText,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              price,
+              style: TextStyle(fontSize: 14),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: onPressed,
+              child: Text(buttonText),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+} 
 
 class ForgotPasswordPage extends StatelessWidget {
   @override
