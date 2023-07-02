@@ -183,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => OtpVerificationPage(),
+        builder: (context) => OtpVerificationPage(name: name),
       ),
     );
   }
@@ -303,6 +303,10 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class OtpVerificationPage extends StatefulWidget {
+  final String name;
+
+  const OtpVerificationPage({required this.name});
+
   @override
   _OtpVerificationPageState createState() => _OtpVerificationPageState();
 }
@@ -316,7 +320,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CongratulationsPage(),
+          builder: (context) => CongratulationsPage(name: widget.name),
         ),
       );
     } else {
@@ -368,14 +372,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 }
 
 class CongratulationsPage extends StatelessWidget {
-  void _navigateToPurchasePremiumPlan(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PurchasePremiumPlanPage(),
-      ),
-    );
-  }
+  final String name;
+
+  CongratulationsPage({required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -387,12 +386,18 @@ class CongratulationsPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Congratulations! OTP verification successful!',
+            'Congratulations, $name! OTP verification successful!',
             style: TextStyle(fontSize: 24),
           ),
-          SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => _navigateToPurchasePremiumPlan(context),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PurchasePremiumPlanPage(),
+                ),
+              );
+            },
             child: Text('Continue'),
           ),
         ],
@@ -464,14 +469,16 @@ class PurchasePremiumPlanPage extends StatelessWidget {
               title: 'Mobile App + Desktop 1 Year',
               price: '1152 QAR',
               buttonText: 'Select',
-              onPressed: () => _buyNowButtonPressed(context, 'Mobile App + Desktop 1 Year'),
+              onPressed: () =>
+                  _buyNowButtonPressed(context, 'Mobile App + Desktop 1 Year'),
             ),
             SizedBox(height: 10),
             PlanCard(
               title: 'On Sale - Lifetime Purchase',
               price: '2500 QAR',
               buttonText: 'Select',
-              onPressed: () => _buyNowButtonPressed(context, 'On Sale - Lifetime Purchase'),
+              onPressed: () =>
+                  _buyNowButtonPressed(context, 'On Sale - Lifetime Purchase'),
             ),
           ],
         ),
