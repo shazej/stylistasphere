@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 void main() {
@@ -14,7 +15,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  String name = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginScreen(),
+                    builder: (context) => PurchasePremiumPlanPage(name: name),
                   ),
                 );
               },
@@ -59,362 +67,18 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  String username = '';
-  String password = '';
-
-  void _loginWithUsernamePassword() {
-    if (username == 'barber1' && password == 'barber@1') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProfilePage(),
-        ),
-      );
-    } else {
-      final snackBar = SnackBar(
-        content: Text('Your entered login is incorrect'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
-
-  void _navigateToForgotPassword() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ForgotPasswordPage(),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Login with:',
-              style: TextStyle(fontSize: 24),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  username = value;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Username',
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  password = value;
-                });
-              },
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _loginWithUsernamePassword,
-              child: Text('Login'),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Handle Google login
-              },
-              child: Text('Login with Google'),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Handle Facebook login
-              },
-              child: Text('Login with Facebook'),
-            ),
-            SizedBox(height: 10),
-            TextButton(
-              onPressed: _navigateToForgotPassword,
-              child: Text(
-                'Forgot Password?',
-                style: TextStyle(
-                  color: Colors.blue,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProfilePage extends StatefulWidget {
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  String name = '';
-  String businessCategory = '';
-  String country = '';
-  String language = 'English';
-  String gender = 'Male';
-
-  void _continueButtonPressed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OtpVerificationPage(name: name),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // TODO: Implement profile photo editing
-              },
-              child: CircleAvatar(
-                radius: 60,
-                // TODO: Replace with actual profile photo
-                backgroundImage: AssetImage('images/default_profile_photo.png'),
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  name = value;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Name',
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  businessCategory = value;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Business Category',
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  country = value;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Country',
-              ),
-            ),
-            SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: language,
-              onChanged: (value) {
-                setState(() {
-                  language = value!;
-                });
-              },
-              items: ['English', 'Spanish', 'French', 'German']
-                  .map((language) => DropdownMenuItem<String>(
-                        value: language,
-                        child: Text(language),
-                      ))
-                  .toList(),
-              decoration: InputDecoration(
-                labelText: 'Language',
-              ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Gender:',
-              style: TextStyle(fontSize: 16),
-            ),
-            Row(
-              children: [
-                Radio<String>(
-                  value: 'Male',
-                  groupValue: gender,
-                  onChanged: (value) {
-                    setState(() {
-                      gender = value!;
-                    });
-                  },
-                ),
-                Text('Male'),
-                SizedBox(width: 20),
-                Radio<String>(
-                  value: 'Female',
-                  groupValue: gender,
-                  onChanged: (value) {
-                    setState(() {
-                      gender = value!;
-                    });
-                  },
-                ),
-                Text('Female'),
-              ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _continueButtonPressed,
-              child: Text('Continue'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class OtpVerificationPage extends StatefulWidget {
-  final String name;
-
-  const OtpVerificationPage({required this.name});
-
-  @override
-  _OtpVerificationPageState createState() => _OtpVerificationPageState();
-}
-
-class _OtpVerificationPageState extends State<OtpVerificationPage> {
-  String pin = '';
-
-  void _verifyButtonPressed() {
-    if (pin.length == 4) {
-      // TODO: Implement OTP verification logic
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CongratulationsPage(name: widget.name),
-        ),
-      );
-    } else {
-      final snackBar = SnackBar(
-        content: Text('Please enter a valid 4-digit PIN'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('OTP Verification'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Enter the 4-digit PIN sent to your email:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  pin = value;
-                });
-              },
-              keyboardType: TextInputType.number,
-              maxLength: 4,
-              decoration: InputDecoration(
-                labelText: 'PIN',
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _verifyButtonPressed,
-              child: Text('Verify'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CongratulationsPage extends StatelessWidget {
-  final String name;
-
-  CongratulationsPage({required this.name});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Congratulations'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Congratulations, $name! OTP verification successful!',
-            style: TextStyle(fontSize: 24),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PurchasePremiumPlanPage(),
-                ),
-              );
-            },
-            child: Text('Continue'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class PurchasePremiumPlanPage extends StatelessWidget {
+  final String name;
+
+  PurchasePremiumPlanPage({required this.name});
+
   void _buyNowButtonPressed(BuildContext context, String plan) {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat.yMd().format(now);
 
-    print('User: ${getUserFullName()}');
+    print('User: $name');
     print('Plan: $plan');
     print('Date: $formattedDate');
-    print('Amount: ${getPlanPrice(plan)}');
 
     // TODO: Implement the logic to record the user's plan selection in your system
 
@@ -424,22 +88,6 @@ class PurchasePremiumPlanPage extends StatelessWidget {
         builder: (context) => ConfirmationPage(),
       ),
     );
-  }
-
-  String getUserFullName() {
-    return 'John Doe';
-  }
-
-  String getPlanPrice(String plan) {
-    if (plan == 'Monthly Plan') {
-      return '80 QAR per month';
-    } else if (plan == 'Mobile App + Desktop 1 Year') {
-      return '1152 QAR';
-    } else if (plan == 'On Sale - Lifetime Purchase') {
-      return '2500 QAR';
-    } else {
-      return '';
-    }
   }
 
   @override
@@ -542,12 +190,21 @@ class ConfirmationPage extends StatelessWidget {
   }
 }
 
-class ForgotPasswordPage extends StatelessWidget {
+class CongratulationsPage extends StatelessWidget {
+  void _continueButtonPressed(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PurchasePremiumPlanPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Forgot Password'),
+        title: Text('Congratulations'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -555,26 +212,31 @@ class ForgotPasswordPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Please enter your email address below to receive your OTP number',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: 'Email Address',
-              ),
+              'Congratulations!',
+              style: TextStyle(fontSize: 24),
             ),
             SizedBox(height: 20),
+            Text(
+              'Your OTP verification is successful.',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 40),
             ElevatedButton(
-              onPressed: () {
-                // TODO: Implement forgot password functionality
-              },
-              child: Text('Send OTP'),
+              onPressed: () => _continueButtonPressed(context),
+              child: Text('Continue'),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+void _buyNowButtonPressed(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PurchasePremiumPlanPage(),
+    ),
+  );
 }
