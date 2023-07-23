@@ -7,21 +7,19 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final String defaultName = '';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: WelcomeScreen(),
+      home: WelcomeScreen(name: defaultName),
     );
   }
 }
 
-class WelcomeScreen extends StatefulWidget {
-  @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
-}
+class WelcomeScreen extends StatelessWidget {
+  final String name;
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
-  String name = '';
+  WelcomeScreen({required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +57,252 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 shape: CircleBorder(),
                 padding: EdgeInsets.all(16),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  String username = '';
+  String password = '';
+
+  void _loginWithUsernamePassword() {
+    if (username == 'barber1' && password == 'barber@1') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfilePage(),
+        ),
+      );
+    } else {
+      final snackBar = SnackBar(
+        content: Text('Your entered login is incorrect'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  void _navigateToForgotPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ForgotPasswordPage(),
+      ),
+    );
+  }
+
+  void _loginWithGoogle() {
+    // TODO: Handle Google login
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Login with:',
+              style: TextStyle(fontSize: 24),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  username = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Username',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  password = value;
+                });
+              },
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _loginWithUsernamePassword,
+              child: Text('Login'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: _loginWithGoogle,
+              icon: SvgPicture.asset(
+                'assets/images/Google__G__Logo.svg.webp',
+                width: 20,
+                height: 20,
+              ),
+              label: Text('Login with Google'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red, // Customize the button color
+              ),
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              onPressed: _navigateToForgotPassword,
+              child: Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String name = '';
+  String businessCategory = '';
+  String country = '';
+  String language = 'English';
+  String gender = 'Male';
+
+  void _continueButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PurchasePremiumPlanPage(name: name),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            GestureDetector(
+              onTap: () {
+                // TODO: Implement profile photo editing
+              },
+              child: CircleAvatar(
+                radius: 60,
+                // TODO: Replace with actual profile photo
+                backgroundImage: AssetImage('images/default_profile_photo.png'),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  name = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Name',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  businessCategory = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Business Category',
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              onChanged: (value) {
+                setState(() {
+                  country = value;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Country',
+              ),
+            ),
+            SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: language,
+              onChanged: (value) {
+                setState(() {
+                  language = value!;
+                });
+              },
+              items: ['English', 'Spanish', 'French', 'German']
+                  .map((language) => DropdownMenuItem<String>(
+                        value: language,
+                        child: Text(language),
+                      ))
+                  .toList(),
+              decoration: InputDecoration(
+                labelText: 'Language',
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Gender:',
+              style: TextStyle(fontSize: 16),
+            ),
+            Row(
+              children: [
+                Radio<String>(
+                  value: 'Male',
+                  groupValue: gender,
+                  onChanged: (value) {
+                    setState(() {
+                      gender = value!;
+                    });
+                  },
+                ),
+                Text('Male'),
+                SizedBox(width: 20),
+                Radio<String>(
+                  value: 'Female',
+                  groupValue: gender,
+                  onChanged: (value) {
+                    setState(() {
+                      gender = value!;
+                    });
+                  },
+                ),
+                Text('Female'),
+              ],
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _continueButtonPressed,
+              child: Text('Continue'),
             ),
           ],
         ),
@@ -190,6 +434,43 @@ class ConfirmationPage extends StatelessWidget {
   }
 }
 
+class ForgotPasswordPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Forgot Password'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Please enter your email address below to receive your OTP number',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: 'Email Address',
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Implement forgot password functionality
+              },
+              child: Text('Send OTP'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class CongratulationsPage extends StatelessWidget {
   void _continueButtonPressed(BuildContext context) {
     Navigator.push(
@@ -232,11 +513,20 @@ class CongratulationsPage extends StatelessWidget {
   }
 }
 
-void _buyNowButtonPressed(BuildContext context) {
+void _buyNowButtonPressed(BuildContext context, String name, String plan) {
+  DateTime now = DateTime.now();
+  String formattedDate = DateFormat.yMd().format(now);
+
+  print('User: $name');
+  print('Plan: $plan');
+  print('Date: $formattedDate');
+
+  // TODO: Implement the logic to record the user's plan selection in your system
+
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => PurchasePremiumPlanPage(),
+      builder: (context) => ConfirmationPage(),
     ),
   );
 }
